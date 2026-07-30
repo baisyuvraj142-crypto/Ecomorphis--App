@@ -8,17 +8,12 @@ import cv2
 import numpy as np
 import random
 
-# The pyzbar import is no longer needed and has been removed.
-
 st.set_page_config(
     page_title="Ecomorphis",
     page_icon="♻️",
     layout="wide"
 )
 
-# -------------------------
-# Custom CSS for Background, Logo, and Font Styling
-# -------------------------
 def set_custom_style():
     st.markdown("""
         <style>
@@ -143,7 +138,6 @@ def set_custom_style():
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     """, unsafe_allow_html=True)
 
-    # Display logo at the top of the main page (but not on the login/signup page itself)
     if st.session_state.page not in ["Welcome", "Login", "Sign Up"]:
         st.markdown("""
             <div class="logo-container">
@@ -151,9 +145,7 @@ def set_custom_style():
             </div>
         """, unsafe_allow_html=True)
 
-# -------------------------
-# Session State Setup
-# -------------------------
+
 if "page" not in st.session_state:
     st.session_state.page = "Welcome"
 if "active_page" not in st.session_state:
@@ -169,9 +161,7 @@ if "citizen_progress" not in st.session_state:
 if "worker_progress" not in st.session_state:
     st.session_state.worker_progress = {}
 
-# -------------------------
-# Data Setup
-# -------------------------
+
 if "facilities" not in st.session_state:
     st.session_state.facilities = pd.DataFrame([
         {"Name": "City Compost Plant", "Type": "Compost", "Waste_Type": "Wet", "Latitude": 28.6139, "Longitude": 77.2090},
@@ -180,7 +170,7 @@ if "facilities" not in st.session_state:
         {"Name": "Hazardous Waste Collection", "Type": "Scrap Shop", "Waste_Type": "Hazardous", "Latitude": 28.6300, "Longitude": 77.2200},
     ])
 
-# Data for the new QR Bin feature
+
 if "bins" not in st.session_state:
     st.session_state.bins = {
         "BIN-BH-001": {"location": "Kolar Road, Near SBI", "status": "Clean", "last_updated": None, "reported_by": None},
@@ -188,9 +178,7 @@ if "bins" not in st.session_state:
         "BIN-BH-003": {"location": "MP Nagar, Zone 1", "status": "Overflowing", "last_updated": "2025-09-19 09:30:00", "reported_by": "citizen"}
     }
 
-# -------------------------
-# Navigation Callback Function
-# -------------------------
+
 def navigate():
     changed_selectbox_key = None
     if st.session_state.get("home_nav", "Home") != "Home":
@@ -209,9 +197,7 @@ def navigate():
         st.session_state.learning_nav = "Learning"
         st.session_state.others_nav = "Others"
 
-# -------------------------
-# Welcome Page
-# -------------------------
+
 def welcome_page():
     set_custom_style()
     st.markdown("""
@@ -247,9 +233,7 @@ def welcome_page():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-# -------------------------
-# Login & Sign Up Pages
-# -------------------------
+
 def login_page():
     set_custom_style()
     col1, col2, col3 = st.columns([1,2,1])
@@ -307,9 +291,7 @@ def signup_page():
                 st.session_state.page = "Login"
                 st.rerun()
 
-# -------------------------
-# Placeholder & Content Pages
-# -------------------------
+
 def about_us_page():
     st.title("About Ecomorphis 🌱")
     st.markdown("---")
@@ -418,9 +400,8 @@ def impact_page():
             '"As a Green Champion, the dashboard is my most powerful tool. I can see real-time data on complaints in my area and coordinate with ULB workers. The penalization system has already improved segregation compliance on my street. It\'s about accountability."'
         )
 
-# -------------------------
-# Core App Pages
-# -------------------------
+
+
 def profile_page():
     user = st.session_state.current_user
     # Refresh points from master user list
@@ -609,9 +590,7 @@ def penalization_page():
             st.success(f"✅ Fine imposed on {citizen_name}.")
             st.session_state.users[citizen_name]["points"] = max(0, st.session_state.users[citizen_name]["points"] - 10)
 
-# -------------------------
-# ADVANCED Scan Bin Page with QR Generation & Scanning
-# -------------------------
+
 def decode_qr_from_image(image_file):
     """Reads an uploaded image file and decodes the first QR code found using OpenCV."""
     try:
@@ -772,9 +751,6 @@ def achievements_page():
             st.write(f"🌟 {r}. **{u}** - {p} points")
     else: st.write("No Green Champions yet.")
 
-# -------------------------
-# NEW Eco Garden Page
-# -------------------------
 def eco_garden_page():
     st.title("🌳 Your Eco Garden")
     st.markdown("---")
